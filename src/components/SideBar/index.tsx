@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { RiMenu5Fill } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 import { Container } from './styles';
 import stone_icon from '../../assets/icons/stone.svg';
 
@@ -17,6 +18,12 @@ const SideBar: React.FC<Props> = ({ onClose }) => {
             <img src={stone_icon} alt="stone" />
             <RiMenu5Fill />
           </button>
+        </li>
+        <li>
+          <Link to="/leads">Leads</Link>
+        </li>
+        <li>
+          <Link to="/clients">Clientes</Link>
         </li>
       </ul>
     </Container>

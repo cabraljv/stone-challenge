@@ -44,6 +44,19 @@ export const Container = styled.div`
         font-size: 1.5em;
         color: ${theme.secondary};
       }
+      padding-bottom: 30px;
+    }
+    li {
+      width: 100%;
+      display: flex;
+      margin: 5px 0;
+      a {
+        text-decoration: none;
+        font-size: 1.5em;
+        color: ${theme.dark};
+        width: 80%;
+        margin: 0 auto;
+      }
     }
   }
 `;

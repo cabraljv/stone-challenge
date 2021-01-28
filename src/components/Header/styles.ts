@@ -26,7 +26,7 @@ export const Container = styled.header`
       font-size: 1.1em;
     }
     img {
-      width: 100%;
+      width: 8em;
     }
   }
 `;

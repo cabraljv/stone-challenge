@@ -6,11 +6,13 @@ import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { format } from 'date-fns';
 import { TextField } from '@material-ui/core';
 import { toast } from 'react-toastify';
+import { ClipLoader } from 'react-spinners';
 import Header from '../../components/Header';
 import { Container } from './styles';
 import api from '../../services/api';
 import establishment_img from '../../assets/establishment_view.svg';
 import Rating from '../../components/Rating';
+import theme from '../../styles/themes';
 
 interface IParams {
   establishment_id: string;
@@ -41,7 +43,7 @@ const Clients: React.FC = () => {
   const [hasVisitToday, setHasVisitToday] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const { establishment_id } = useParams<IParams>();
-
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
 
   const handleMarkVisit = useCallback(async () => {
@@ -111,6 +113,7 @@ const Clients: React.FC = () => {
             (response.data.potential_tpv / response.data.transactions) * 100;
           setMigrationPercent(`${migration_percent.toPrecision(1) || 0}%`);
         }
+        setLoading(false);
       }
     }
     getData();
@@ -127,58 +130,68 @@ const Clients: React.FC = () => {
   }, []);
   return (
     <Container>
-      <Header headerTitle={name} headerImg={establishment_img} />
-      <section className="content">
-        <p className="adress">{adress}</p>
-        <div className="satisfaction">
-          <p>Satisfação do cliente</p>
-          <Rating rating={rating} />
-          {hasVisitToday ? (
-            <p className="visitToday">Você tem uma visita marcada para hoje</p>
-          ) : (
-            <p className="visitToday">
-              Você não tem uma visita marcada para hoje
-            </p>
-          )}
-          <p />
+      {loading ? (
+        <div className="loading">
+          <ClipLoader size={150} color={theme.secondary} loading />
         </div>
-        <div className="infos">
-          <div className="left">
-            <p>
-              <GiBackwardTime />
-              <span>{lastVisit}</span>
-            </p>
-            <p>
-              <AiOutlineCalendar />
-              <span>{nextVisit}</span>
-            </p>
-          </div>
-          <div className="right">
-            <p>{segment}</p>
-            <p>
-              <RiMoneyDollarCircleLine />
-              <span>{migrationPercent} de migração</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {nextVisit === 'N/A' && (
+      ) : (
         <>
-          <div className="date-picker">
-            <TextField
-              id="time"
-              type="date"
-              onChange={(e) => handlePickDate(e.target.value)}
-            />
-          </div>
-          <button
-            className="create-visit"
-            type="button"
-            onClick={handleMarkVisit}
-          >
-            Marcar visita
-          </button>
+          <Header headerTitle={name} headerImg={establishment_img} />
+          <section className="content">
+            <p className="adress">{adress}</p>
+            <div className="satisfaction">
+              <p>Satisfação do cliente</p>
+              <Rating rating={rating} />
+              {hasVisitToday ? (
+                <p className="visitToday">
+                  Você tem uma visita marcada para hoje
+                </p>
+              ) : (
+                <p className="visitToday">
+                  Você não tem uma visita marcada para hoje
+                </p>
+              )}
+              <p />
+            </div>
+            <div className="infos">
+              <div className="left">
+                <p>
+                  <GiBackwardTime />
+                  <span>{lastVisit}</span>
+                </p>
+                <p>
+                  <AiOutlineCalendar />
+                  <span>{nextVisit}</span>
+                </p>
+              </div>
+              <div className="right">
+                <p>{segment}</p>
+                <p>
+                  <RiMoneyDollarCircleLine />
+                  <span>{migrationPercent} de migração</span>
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {nextVisit === 'N/A' && (
+            <>
+              <div className="date-picker">
+                <TextField
+                  id="time"
+                  type="date"
+                  onChange={(e) => handlePickDate(e.target.value)}
+                />
+              </div>
+              <button
+                className="create-visit"
+                type="button"
+                onClick={handleMarkVisit}
+              >
+                Marcar visita
+              </button>
+            </>
+          )}
         </>
       )}
     </Container>

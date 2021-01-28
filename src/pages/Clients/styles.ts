@@ -7,6 +7,9 @@ export const Container = styled.div`
   background: ${theme.light_blue};
   display: flex;
   flex-direction: column;
+  div.loading {
+    margin: auto;
+  }
   section.content {
     width: 85%;
     margin: 60px auto;

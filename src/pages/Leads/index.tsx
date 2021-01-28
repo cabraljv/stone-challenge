@@ -10,10 +10,12 @@ import { FaSuitcase, FaWalking } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 import { TextField } from '@material-ui/core';
+import { ClipLoader } from 'react-spinners';
 import Header from '../../components/Header';
 import { Container } from './styles';
 import api from '../../services/api';
 import establishment_img from '../../assets/establishment_view.svg';
+import theme from '../../styles/themes';
 
 interface IParams {
   establishment_id: string;
@@ -46,11 +48,13 @@ const Leads: React.FC = () => {
   const [negociationStatus, setNegociationStatus] = useState('N/A');
   const [proposte, setProposte] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date>();
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
   const handleMarkVisit = useCallback(async () => {
     if (selectedDate) {
+      setLoading(true);
       const response = await api.post(`/establishment/${id}/visit`, {
         date: selectedDate,
       });
@@ -78,6 +82,7 @@ const Leads: React.FC = () => {
           progress: undefined,
         });
       }
+      setLoading(false);
     }
   }, [selectedDate, history, id]);
 
@@ -159,88 +164,99 @@ const Leads: React.FC = () => {
         setVisitsCount(response.data.visits_count);
         setId(response.data._id);
       }
+      setLoading(false);
     }
     getData();
   }, [establishment_id]);
   return (
     <Container>
-      <Header headerTitle={name} headerImg={establishment_img} />
+      {loading ? (
+        <div className="loading">
+          <ClipLoader size={150} color={theme.secondary} loading />
+        </div>
+      ) : (
+        <>
+          <Header headerTitle={name} headerImg={establishment_img} />
 
-      <section className="content">
-        <p className="adress">{adress}</p>
-        <div className="visit">
-          {hasVisitToday ? (
-            <p className="visitToday">Você tem uma visita marcada para hoje</p>
-          ) : (
-            <p className="visitToday">
-              Você não tem uma visita marcada para hoje
-            </p>
+          <section className="content">
+            <p className="adress">{adress}</p>
+            <div className="visit">
+              {hasVisitToday ? (
+                <p className="visitToday">
+                  Você tem uma visita marcada para hoje
+                </p>
+              ) : (
+                <p className="visitToday">
+                  Você não tem uma visita marcada para hoje
+                </p>
+              )}
+              <p />
+            </div>
+            <div className="infos">
+              <div className="left">
+                <p>
+                  <GiBackwardTime />
+                  <span>{lastVisit}</span>
+                </p>
+                <p>
+                  <AiOutlineCalendar />
+                  <span>{nextVisit}</span>
+                </p>
+                <p>
+                  <FaSuitcase />
+                  <span>{negociationStatus}</span>
+                </p>
+              </div>
+              <div className="right">
+                <p>{segment}</p>
+                <p>
+                  <RiMoneyDollarCircleLine />
+                  <span>{tpv}k em potencial</span>
+                </p>
+                <p>
+                  <FaWalking />
+                  <span>{visitsCount}</span>
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {nextVisit === 'N/A' && (
+            <>
+              <div className="date-picker">
+                <TextField
+                  id="time"
+                  type="date"
+                  onChange={(e) => handlePickDate(e.target.value)}
+                />
+              </div>
+              <button
+                className="create-visit"
+                type="button"
+                onClick={handleMarkVisit}
+              >
+                Marcar visita
+              </button>
+            </>
           )}
-          <p />
-        </div>
-        <div className="infos">
-          <div className="left">
-            <p>
-              <GiBackwardTime />
-              <span>{lastVisit}</span>
-            </p>
-            <p>
-              <AiOutlineCalendar />
-              <span>{nextVisit}</span>
-            </p>
-            <p>
-              <FaSuitcase />
-              <span>{negociationStatus}</span>
-            </p>
-          </div>
-          <div className="right">
-            <p>{segment}</p>
-            <p>
-              <RiMoneyDollarCircleLine />
-              <span>{tpv}k em potencial</span>
-            </p>
-            <p>
-              <FaWalking />
-              <span>{visitsCount}</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {nextVisit === 'N/A' && (
-        <>
-          <div className="date-picker">
-            <TextField
-              id="time"
-              type="date"
-              onChange={(e) => handlePickDate(e.target.value)}
-            />
-          </div>
-          <button
-            className="create-visit"
-            type="button"
-            onClick={handleMarkVisit}
-          >
-            Marcar visita
-          </button>
-        </>
-      )}
-      {negociationStatus === 'FRIA' && (
-        <>
-          <div className="proposte">
-            <p className="label-proposte">Proposta</p>
-            <textarea
-              className="proposte"
-              onChange={(e) => setProposte(e.target.value)}
-            />
-          </div>
-          <button
-            className="create-proposte"
-            type="button"
-            onClick={handleSubmit}
-          >
-            Enviar proposta
-          </button>
+          {negociationStatus === 'FRIA' && (
+            <>
+              <div className="proposte">
+                <p className="label-proposte">Proposta</p>
+                <textarea
+                  className="proposte"
+                  onChange={(e) => setProposte(e.target.value)}
+                />
+              </div>
+              <button
+                className="create-proposte"
+                type="button"
+                onClick={handleSubmit}
+              >
+                Enviar proposta
+              </button>
+            </>
+          )}
         </>
       )}
     </Container>

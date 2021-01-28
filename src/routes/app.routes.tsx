@@ -7,6 +7,8 @@ import CreateEstablishment from '../pages/CreateEstablishment';
 import 'react-toastify/dist/ReactToastify.css';
 import Clients from '../pages/Clients';
 import Leads from '../pages/Leads';
+import ListLeads from '../pages/ListLeads';
+import ClientsList from '../pages/ClientsList';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -15,7 +17,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/establishment" exact component={CreateEstablishment} />
       <Route path="/client/:establishment_id" component={Clients} />
       <Route path="/lead/:establishment_id" component={Leads} />
-
+      <Route path="/leads" component={ListLeads} />
+      <Route path="/clients" component={ClientsList} />
       <ToastContainer />
     </>
   );
