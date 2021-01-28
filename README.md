@@ -33,4 +33,10 @@ npm
 npm run start
 ```
 
+## Screenshots
+
+<img src="./docs/1.png" width="200px"/>  <img src="./docs/2.png" width="200px"/> <img src="./docs/3.png" width="200px"/> <img src="./docs/4.png" width="200px"/> <img src="./docs/5.png" width="200px"/> <img src="./docs/6.png" width="200px"/>
+
+
+
 Desenvolvido por João Victor Cabral
