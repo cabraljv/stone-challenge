@@ -2,11 +2,13 @@ import React, { useState, useCallback } from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 import Header from '../../components/Header';
 import header_illustration from '../../assets/create_establishment.svg';
 import { Container, Select } from './styles';
 import LocationPicker from '../../components/LocationPicker';
 import api from '../../services/api';
+import theme from '../../styles/themes';
 
 const segmentos = [
   {
@@ -37,10 +39,12 @@ const CreateEstablishment: React.FC = () => {
   const [segment, setSegment] = useState('');
   const [tpv, setTPV] = useState(0);
   const [location, setLocation] = useState<ILocation>();
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
   const handleSubmit = useCallback(async () => {
+    setLoading(true);
     if (name === '' || segment === '' || tpv === 0 || location === null) {
       toast('Preencha todos os campos corretamente', {
         position: 'top-right',
@@ -52,6 +56,7 @@ const CreateEstablishment: React.FC = () => {
         draggable: true,
         progress: undefined,
       });
+      setLoading(false);
       return;
     }
 
@@ -88,6 +93,7 @@ const CreateEstablishment: React.FC = () => {
         progress: undefined,
       });
     }
+    setLoading(false);
   }, [name, segment, tpv, location, history]);
   return (
     <Container>
@@ -136,8 +142,17 @@ const CreateEstablishment: React.FC = () => {
             <LocationPicker onSelectLocation={(e) => setLocation(e)} />
           </div>
         </div>
-        <button className="submit" type="button" onClick={handleSubmit}>
-          CADASTRAR
+        <button
+          className="submit"
+          disabled={loading}
+          type="button"
+          onClick={handleSubmit}
+        >
+          {loading ? (
+            <ClipLoader size={40} color={theme.white} loading />
+          ) : (
+            'CADASTRAR'
+          )}
         </button>
       </form>
     </Container>
