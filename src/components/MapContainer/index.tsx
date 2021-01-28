@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import GoogleMap from 'google-map-react';
 import map_style from '../../assets/map/mapstyle.json';
 import { Container, Marker } from './styles';
 import marker_icon from '../../assets/icons/store_marker.svg';
 import lead_icon from '../../assets/icons/lead_marker.svg';
+import theme from '../../styles/themes';
 
 interface IEstablishment {
   _id: string;
@@ -23,6 +24,26 @@ const MapContainer: React.FC<IProps> = ({ data, onClickMarker }) => {
     lat: -19.9243479,
     lng: -43.950911,
   });
+
+  const handleApiLoaded = useCallback(
+    (map: any, maps: any, data_points: IEstablishment[]) => {
+      if (data_points) {
+        const triangleCoords = data_points.map((item) => ({
+          lat: item.lat,
+          lng: item.lng,
+        }));
+        const triangle = new maps.Polygon({
+          paths: triangleCoords,
+          strokeColor: theme.secondary,
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillOpacity: 0.35,
+        });
+        triangle.setMap(map);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -45,6 +66,7 @@ const MapContainer: React.FC<IProps> = ({ data, onClickMarker }) => {
         options={{
           styles: map_style,
         }}
+        onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps, data)}
       >
         {data.map((item) => (
           <Marker

@@ -46,6 +46,12 @@ const Main: React.FC = () => {
     [mapData]
   );
 
+  const handleOpenModal = useCallback(() => {
+    if (modalData) {
+      setModalOpen(!modalOpen);
+    }
+  }, [modalOpen, modalData]);
+
   useEffect(() => {
     async function getData() {
       const response = await api.get<IEstablishment[]>('/establishment');
@@ -72,11 +78,7 @@ const Main: React.FC = () => {
       >
         <MdAdd />
       </button>
-      <Modal
-        open={modalOpen}
-        data={modalData}
-        handleOpen={() => setModalOpen(!modalOpen)}
-      />
+      <Modal open={modalOpen} data={modalData} handleOpen={handleOpenModal} />
     </Container>
   );
 };
