@@ -1,27 +1,30 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { AiOutlineDoubleLeft, AiOutlineCalendar } from 'react-icons/ai';
 import { GiBackwardTime } from 'react-icons/gi';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { format } from 'date-fns';
+import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
 
 interface IProps {
   open: boolean;
   handleOpen: () => void;
   data: {
-    id: string;
+    _id: string;
     name: string;
     segment: string;
     potential_tpv: number;
     adress: string;
-    last_visit?: Date;
-    next_visit?: Date;
+    last_visit?: string;
+    next_visit?: string;
     negociation_status: string;
   } | null;
 }
 
 const Modal: React.FC<IProps> = ({ open, handleOpen, data }) => {
+  const history = useHistory();
+
   const tpv = useMemo(() => {
     if (data) {
       return (data.potential_tpv / 1000).toPrecision(2);
@@ -32,7 +35,7 @@ const Modal: React.FC<IProps> = ({ open, handleOpen, data }) => {
   const next_date = useMemo(() => {
     if (data) {
       if (data.next_visit) {
-        return format(data.next_visit, 'MM/DD');
+        return format(Date.parse(data.next_visit), 'dd/MM');
       }
     }
     return 'N/A';
@@ -41,11 +44,20 @@ const Modal: React.FC<IProps> = ({ open, handleOpen, data }) => {
   const last_date = useMemo(() => {
     if (data) {
       if (data.last_visit) {
-        return format(data.last_visit, 'MM/DD');
+        return format(Date.parse(data.last_visit), 'dd/MM');
       }
     }
     return 'N/A';
   }, [data]);
+
+  const handleClickRedirect = useCallback(() => {
+    if (!data) return;
+    if (data.negociation_status === 'CONCLUIDO') {
+      history.push(`/client/${data?._id}`);
+    } else {
+      history.push(`/lead/${data?._id}`);
+    }
+  }, [data, history]);
 
   return (
     <Container open={open}>
@@ -79,7 +91,11 @@ const Modal: React.FC<IProps> = ({ open, handleOpen, data }) => {
               </p>
             </div>
           </div>
-          <button className="more-info" type="button">
+          <button
+            className="more-info"
+            type="button"
+            onClick={handleClickRedirect}
+          >
             {data.negociation_status === 'CONCLUIDO'
               ? 'Mais informações da loja'
               : 'Mais informações do lead'}

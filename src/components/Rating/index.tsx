@@ -19,23 +19,23 @@ const Rating: React.FC<IProps> = ({ rating }) => {
     <Container>
       <span>
         <MdSentimentVeryDissatisfied
-          color={rating > 0 ? '#BDBDBD' : theme.primary}
+          color={rating > 0 ? theme.primary : '#BDBDBD'}
         />
       </span>
       <span>
         <MdSentimentDissatisfied
-          color={rating > 1 ? '#BDBDBD' : theme.primary}
+          color={rating > 1 ? theme.primary : '#BDBDBD'}
         />
       </span>
       <span>
-        <MdSentimentNeutral color={rating > 2 ? '#BDBDBD' : theme.primary} />
+        <MdSentimentNeutral color={rating > 2 ? theme.primary : '#BDBDBD'} />
       </span>
       <span>
-        <MdSentimentSatisfied color={rating > 3 ? '#BDBDBD' : theme.primary} />
+        <MdSentimentSatisfied color={rating > 3 ? theme.primary : '#BDBDBD'} />
       </span>
       <span>
         <MdSentimentVerySatisfied
-          color={rating > 4 ? '#BDBDBD' : theme.primary}
+          color={rating > 4 ? theme.primary : '#BDBDBD'}
         />
       </span>
     </Container>

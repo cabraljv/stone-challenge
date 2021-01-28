@@ -12,12 +12,21 @@ export const Container = styled.div<IProps>`
   left: 0;
   background: ${theme.white};
   border-radius: 60px 60px 0 0;
-  height: 20vh;
+  height: 23vh;
   transition: transform 0.5s;
+  button.more-info {
+    width: 100%;
+    font-size: 1.2em;
+    padding: 10px 0;
+    border-radius: 10px;
+    background: none;
+    border: 0;
+    color: ${theme.secondary};
+  }
   ${(props) =>
     !props.open
       ? css`
-          transform: translateY(13.5vh);
+          transform: translateY(16.5vh);
         `
       : css`
           transform: translateY(0);

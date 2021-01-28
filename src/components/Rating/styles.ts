@@ -5,5 +5,6 @@ export const Container = styled.div`
   align-items: center;
   span {
     padding: 0 5px;
+    font-size: 2em;
   }
 `;

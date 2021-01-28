@@ -46,7 +46,7 @@ const LocationPicker: React.FC<IPicker> = ({ onSelectLocation }) => {
   return (
     <Container>
       <GoogleMap
-        defaultCenter={location}
+        center={location}
         bootstrapURLKeys={{
           key: process.env.REACT_APP_MAPS_KEY || '',
           language: 'pt-br',

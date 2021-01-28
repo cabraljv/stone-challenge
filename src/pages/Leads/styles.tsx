@@ -17,7 +17,6 @@ export const Container = styled.div`
     }
     p.visitToday {
       font-size: 1.3em;
-      padding-top: 10px;
     }
     div.infos {
       margin-top: 70px;
@@ -41,6 +40,21 @@ export const Container = styled.div`
     .MuiInputBase-root {
       font-size: 1.5em;
       opacity: 0.7;
+    }
+  }
+  div.proposte {
+    width: 85%;
+    margin: 20px auto;
+    margin-top: 80px;
+    p {
+      text-transform: uppercase;
+      font-weight: bold;
+      color: ${theme.secondary};
+    }
+    textarea {
+      border: 0;
+      width: 100%;
+      height: 30em;
     }
   }
   button {

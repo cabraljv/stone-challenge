@@ -6,7 +6,7 @@ import marker_icon from '../../assets/icons/store_marker.svg';
 import lead_icon from '../../assets/icons/lead_marker.svg';
 
 interface IEstablishment {
-  id: string;
+  _id: string;
   lat: number;
   lng: number;
   name: string;
@@ -36,7 +36,7 @@ const MapContainer: React.FC<IProps> = ({ data, onClickMarker }) => {
   return (
     <Container>
       <GoogleMap
-        defaultCenter={location}
+        center={location}
         bootstrapURLKeys={{
           key: process.env.REACT_APP_MAPS_KEY || '',
           language: 'pt-br',
@@ -50,8 +50,8 @@ const MapContainer: React.FC<IProps> = ({ data, onClickMarker }) => {
           <Marker
             lat={item.lat}
             lng={item.lng}
-            key={`${item.id}-${item.name}`}
-            onClick={() => onClickMarker(item.id)}
+            key={`${item._id}-${item.name}`}
+            onClick={() => onClickMarker(item._id)}
           >
             <img
               src={
